@@ -219,7 +219,8 @@ DynamoDB best practices include:
 
 Default termination policy behavior:
 
-> 1. Destroy instance ở vùng số lượng nhiều nhất
+> 
+1. Destroy instance ở vùng số lượng nhiều nhất
 2. Destroy on-demand
 3. Destroy instance dùng lauch config cũ nhất
 4. Destroy instance sắp tới giờ thanh toán gần nhất
