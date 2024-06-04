@@ -15,7 +15,7 @@ coverImage:
 
 ### EFS
 
-- Chỉ dùng ở máy chủ linux
+- Only for linux instance
 - File locking + concurrent access + **auto scaling** = EFS
 
 ### EBS
