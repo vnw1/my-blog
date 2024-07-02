@@ -10,5 +10,6 @@ updates:
     schedule:
       interval: "monthly"
     allow:
-      - dependency-type: "direct"
+      - dependency-name: "typescript"
+      # - dependency-type: "direct"
     open-pull-requests-limit: 20
