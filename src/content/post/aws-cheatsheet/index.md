@@ -4,6 +4,7 @@ description: "Cheatsheet about aws and how to use them for your carrier skill"
 publishDate: "11 Oct 2023"
 tags: ["aws", "cheatsheet"]
 updatedDate: 8 April 2024
+draft: true
 coverImage:
   src: "./img/Untitled.png"
   alt: "Astro build wallpaper"
@@ -73,19 +74,19 @@ coverImage:
 DynamoDB best practices include:
 
 > – Keep item sizes small.
-> 
+>
 
 > – If you are storing serial data in DynamoDB that will require actions based on data/time use separate tables for days, weeks, months.
-> 
+>
 
 > – Store more frequently and less frequently accessed data in separate tables.
-> 
+>
 
 > – If possible compress larger attribute values.
-> 
+>
 
 > – Store objects larger than 400KB in S3 and use pointers (S3 Object ID) in DynamoDB.
-> 
+>
 
 ### Storage gateway
 
@@ -219,12 +220,12 @@ DynamoDB best practices include:
 
 Default termination policy behavior:
 
-> 
+>
 1. Destroy instance ở vùng số lượng nhiều nhất
 2. Destroy on-demand
 3. Destroy instance dùng lauch config cũ nhất
 4. Destroy instance sắp tới giờ thanh toán gần nhất
-> 
+>
 
 ## Load Balancer
 
