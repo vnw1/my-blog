@@ -19,7 +19,7 @@
 	// Function to send the theme initialization/change message
 	function updateGiscusTheme() {
 		const iframe = document.querySelector("iframe.giscus-frame");
-		if (iframe && iframe instanceof HTMLIFrameElement) {
+		if (iframe instanceof HTMLIFrameElement && iframe.contentWindow) {
 			const theme =
 				document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
 			iframe.contentWindow.postMessage(
