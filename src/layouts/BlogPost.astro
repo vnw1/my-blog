@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-
+import PostComments from "../components/PostComments.astro";
 import BlogHero from "@/components/blog/Hero.astro";
 // import TOC from "@/components/blog/TOC.astro";
 import WebMentions from "@/components/blog/webmentions/index.astro";
@@ -96,6 +96,7 @@ const uniqueTags = getUniqueTags(allPosts);
 			<path d="M4.5 15.75l7.5-7.5 7.5 7.5" stroke-linecap="round" stroke-linejoin="round"></path>
 		</svg>
 	</button>
+	<PostComments />
 </BaseLayout>
 
 <script>

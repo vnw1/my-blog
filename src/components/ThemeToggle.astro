@@ -58,7 +58,52 @@
 <script>
 	// Note that if you fire the theme-change event outside of this component, it will not be reflected in the button's aria-checked attribute
 	import { rootInDarkMode } from "@/utils";
+	function changeGiscusTheme() {
+		const theme = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
 
+		function sendMessage(message: { setConfig: { theme: string } }) {
+			const iframe = document.querySelector("iframe.giscus-frame");
+			if (!iframe) return;
+			// 1. Check if iframe is an HTMLIFrameElement:
+			if (iframe instanceof HTMLIFrameElement) {
+				// 2. Now you can safely access contentWindow:
+				(
+					iframe.contentWindow as WindowProxy & {
+						postMessage: (message: any, targetOrigin: string) => void;
+					}
+				).postMessage({ giscus: message }, "https://giscus.app");
+			} else {
+				// Handle the case where the element is not an iframe (optional)
+				console.error("Element found is not an iframe:", iframe);
+			}
+		}
+
+		sendMessage({
+			setConfig: {
+				theme: theme,
+			},
+		});
+	}
+	function setGiscusThemeOnload() {
+		const targetNode = document.body; // Observe the entire body for the iframe
+		const config = { childList: true, subtree: true }; // Watch for added nodes
+
+		const callback: MutationCallback = (mutationList, observer) => {
+			for (const mutation of mutationList) {
+				if (mutation.type === "childList") {
+					const iframe = document.querySelector("iframe.giscus-frame");
+					if (iframe) {
+						changeGiscusTheme();
+						observer.disconnect(); // Stop observing once found
+						break;
+					}
+				}
+			}
+		};
+
+		const observer = new MutationObserver(callback);
+		observer.observe(targetNode, config);
+	}
 	class ThemeToggle extends HTMLElement {
 		#controller: AbortController | undefined;
 
@@ -69,6 +114,7 @@
 			button.setAttribute("aria-checked", String(rootInDarkMode()));
 			// Abort signal
 			const { signal } = (this.#controller = new AbortController());
+			setGiscusThemeOnload();
 
 			// button event
 			button.addEventListener(
@@ -82,11 +128,12 @@
 					});
 					// dispatch event -> ThemeProvider.astro
 					document.dispatchEvent(themeChangeEvent);
+					changeGiscusTheme();
 
 					// set the aria-checked attribute
 					button.setAttribute("aria-checked", String(rootInDarkMode()));
 				},
-				{ signal }
+				{ signal },
 			);
 		}
 
@@ -95,5 +142,6 @@
 		}
 	}
 
+	// Call the function to start checking for giscus iframe
 	customElements.define("theme-toggle", ThemeToggle);
 </script>
