@@ -35,18 +35,27 @@
 
 	// Listen for the giscus "ready" message
 	window.addEventListener("message", (event) => {
-		console.log("Message received:", event); // Log all messages
-		console.log("Message origin:", event.origin);
-		if (event.origin === "https://giscus.app" && event.data.giscus && event.data.giscus.ready) {
-			console.log("giscus iframe is ready!");
-			giscusReady = true; // Set the flag to true when ready
-			updateGiscusTheme();
+		if (event.origin === "https://giscus.app" && event.data) {
+			if (typeof event.data === "string" && event.data.startsWith("giscus:")) {
+				// Handle string messages (e.g., "giscus:resizeHeight:84")
+				const parts = event.data.split(":");
+				if (parts[1] === "resizeHeight" && !giscusReady) {
+					giscusReady = true;
+					updateGiscusTheme();
+				}
+			} else if (typeof event.data === "object" && event.data.giscus) {
+				// Handle object messages (e.g., { giscus: { resizeHeight: 0 } })
+				if ("resizeHeight" in event.data.giscus && !giscusReady) {
+					giscusReady = true;
+					updateGiscusTheme();
+				}
+			}
 		}
 	});
 
 	// Theme change listener
 	document.addEventListener("theme-change", () => {
-		console.log('listen event theme-change');
+		console.log("listen event theme-change");
 		updateGiscusTheme();
 	});
 </script>
