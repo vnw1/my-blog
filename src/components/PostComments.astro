@@ -1,4 +1,4 @@
-<section class="giscus mx-auto mt-10 w-full"></section>
+<section id="giscus_thread" class="giscus mx-auto mt-10 w-full"></section>
 
 <script
 	src="https://giscus.app/client.js"
@@ -13,6 +13,33 @@
 	data-input-position="bottom"
 	data-theme="light"
 	data-lang="en"
-	data-loading="lazy"
-	async
-></script>
+	async></script>
+
+<script>
+	// Function to send the theme initialization/change message
+	function updateGiscusTheme() {
+		const iframe = document.querySelector("iframe.giscus-frame");
+		if (iframe && iframe instanceof HTMLIFrameElement) {
+			const theme =
+				document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+			iframe.contentWindow.postMessage(
+				{ giscus: { setConfig: { theme: theme } } },
+				"https://giscus.app",
+			);
+		}
+	}
+
+	// Listen for a message from the giscus iframe indicating it's ready
+	window.addEventListener("message", (event) => {
+		if (event.origin !== "https://giscus.app") return;
+		if (event.data.giscus && event.data.giscus.ready) {
+			console.log("giscus iframe is ready! Initializing theme...");
+			updateGiscusTheme(); // Initialize theme once ready
+		}
+	});
+
+	// Theme change listener
+	document.addEventListener("theme-change", () => {
+		updateGiscusTheme(); // Update theme when 'theme-change' event is fired
+	});
+</script>
