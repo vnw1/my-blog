@@ -114,7 +114,6 @@
 			button.setAttribute("aria-checked", String(rootInDarkMode()));
 			// Abort signal
 			const { signal } = (this.#controller = new AbortController());
-			setGiscusThemeOnload();
 
 			// button event
 			button.addEventListener(
@@ -128,7 +127,6 @@
 					});
 					// dispatch event -> ThemeProvider.astro
 					document.dispatchEvent(themeChangeEvent);
-					changeGiscusTheme();
 
 					// set the aria-checked attribute
 					button.setAttribute("aria-checked", String(rootInDarkMode()));
