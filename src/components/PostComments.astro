@@ -16,30 +16,36 @@
 	async></script>
 
 <script>
-	// Function to send the theme initialization/change message
+	let giscusReady = false; // Flag to track giscus iframe readiness
+
+	// Function to update the giscus theme
 	function updateGiscusTheme() {
-		const iframe = document.querySelector("iframe.giscus-frame");
-		if (iframe instanceof HTMLIFrameElement && iframe.contentWindow) {
-			const theme =
-				document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
-			iframe.contentWindow.postMessage(
-				{ giscus: { setConfig: { theme: theme } } },
-				"https://giscus.app",
-			);
+		if (giscusReady) {
+			const iframe = document.querySelector("iframe.giscus-frame");
+			if (iframe instanceof HTMLIFrameElement && iframe.contentWindow) {
+				const theme =
+					document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+				iframe.contentWindow.postMessage(
+					{ giscus: { setConfig: { theme: theme } } },
+					"https://giscus.app",
+				);
+			}
 		}
 	}
 
-	// Listen for a message from the giscus iframe indicating it's ready
+	// Listen for the giscus "ready" message
 	window.addEventListener("message", (event) => {
-		if (event.origin !== "https://giscus.app") return;
-		if (event.data.giscus && event.data.giscus.ready) {
-			console.log("giscus iframe is ready! Initializing theme...");
-			updateGiscusTheme(); // Initialize theme once ready
+		console.log("Message received:", event); // Log all messages
+		console.log("Message origin:", event.origin);
+		if (event.origin === "https://giscus.app" && event.data.giscus && event.data.giscus.ready) {
+			console.log("giscus iframe is ready!");
+			giscusReady = true; // Set the flag to true when ready
+			updateGiscusTheme();
 		}
 	});
 
 	// Theme change listener
 	document.addEventListener("theme-change", () => {
-		updateGiscusTheme(); // Update theme when 'theme-change' event is fired
+		updateGiscusTheme();
 	});
 </script>
